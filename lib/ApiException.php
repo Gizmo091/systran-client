@@ -6,7 +6,7 @@
  * @category Class
  * @package  Systran\Client
  * @author   http://github.com/Systran-api/Systran-codegen
- * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache Licene v2
+ * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache Licence v2
  * @link
  */
 /**
@@ -32,7 +32,7 @@
 
 namespace Systran\Client;
 
-use \Exception;
+use Exception;
 
 /**
  * ApiException Class Doc Comment
@@ -40,7 +40,7 @@ use \Exception;
  * @category Class
  * @package  Systran\Client
  * @author   http://github.com/Systran-api/Systran-codegen
- * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache Licene v2
+ * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache Licence v2
  * @link
  */
 class ApiException extends Exception
@@ -48,30 +48,31 @@ class ApiException extends Exception
 
     /** 
      * The HTTP body of the server response.
-     * @var string
+     * @var string|null
      */
-    protected $responseBody;
+    protected ?string $responseBody;
   
     /**
      * The HTTP header of the server response.
      * @var string[]
      */
-    protected $responseHeaders;
+    protected ?array $responseHeaders;
   
     /**
      * The deserialized response object
      * @var $responseObject;
      */
-    protected $responseObject;
- 
+    protected mixed $responseObject;
+
     /**
      * Constructor
-     * @param string $message         Error message
-     * @param string $code            HTTP status code
-     * @param string $responseHeaders HTTP response header
-     * @param string $responseBody    Deseralized response object
+     *
+     * @param string      $message         Error message
+     * @param int         $code            HTTP status code
+     * @param string|null $responseHeaders HTTP response header
+     * @param string|null $responseBody    Deseralized response object
      */
-    public function __construct($message="", $code=0, $responseHeaders=null, $responseBody=null)
+    public function __construct(string $message="",int $code=0, string $responseHeaders=null, string $responseBody=null)
     {
         parent::__construct($message, $code);
         $this->responseHeaders = $responseHeaders;
@@ -83,7 +84,7 @@ class ApiException extends Exception
      *
      * @return string HTTP response header
      */
-    public function getResponseHeaders()
+    public function getResponseHeaders() : string
     {
         return $this->responseHeaders;
     }
@@ -93,7 +94,7 @@ class ApiException extends Exception
      *
      * @return string HTTP response body
      */
-    public function getResponseBody()
+    public function getResponseBody() : string
     {
         return $this->responseBody;
     }
@@ -103,7 +104,7 @@ class ApiException extends Exception
      * @param mixed $obj Deserialized response object
      * @return void
      */
-    public function setResponseObject($obj)
+    public function setResponseObject(mixed $obj) : void
     {
         $this->responseObject = $obj;
     }
@@ -113,7 +114,7 @@ class ApiException extends Exception
      *
      * @return mixed the deserialized response object
      */
-    public function getResponseObject()
+    public function getResponseObject() : mixed
     {
         return $this->responseObject;
     }

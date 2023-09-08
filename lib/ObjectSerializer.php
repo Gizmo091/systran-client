@@ -33,6 +33,9 @@
 
 namespace Systran\Client;
 
+use DateTime;
+use SplFileObject;
+
 /**
  * ObjectSerializer Class Doc Comment
  *
@@ -51,18 +54,19 @@ class ObjectSerializer
      *
      * @return string serialized form of $data
      */
-    public function sanitizeForSerialization($data)
+    public function sanitizeForSerialization(mixed $data)
     {
         if (is_scalar($data) || null === $data) {
             $sanitized = $data;
-        } else if ($data instanceof \DateTime) {
-            $sanitized = $data->format(\DateTime::ISO8601);
+        } else if ($data instanceof DateTime) {
+            $sanitized = $data->format( 'Y-m-d\TH:i:sO');
         } else if (is_array($data)) {
             foreach ($data as $property => $value) {
                 $data[$property] = $this->sanitizeForSerialization($value);
             }
             $sanitized = $data;
         } else if (is_object($data)) {
+            /** @var \Systran\Client\Model\Model $data */
             $values = array();
             foreach (array_keys($data::$SystranTypes) as $property) {
                 $getter = $data::$getters[$property];
@@ -82,12 +86,11 @@ class ObjectSerializer
      * Take value and turn it into a string suitable for inclusion in
      * the path, by url-encoding.
      *
-     * @param string $value a string which will be part of the path
+     * @param mixed $value a string which will be part of the path
      *
      * @return string the serialized object
      */
-    public function toPathValue($value)
-    {
+    public function toPathValue(mixed $value): string {
         return rawurlencode($this->toString($value));
     }
 
@@ -97,11 +100,11 @@ class ObjectSerializer
      * If it's a string, pass through unchanged. It will be url-encoded
      * later.
      *
-     * @param object $object an object to be serialized to a string
+     * @param mixed $object an object to be serialized to a string
      *
      * @return string the serialized object
      */
-    public function toQueryValue($object)
+    public function toQueryValue(mixed $object) : string
     {
         if (is_array($object)) {
             return implode(',', $object);
@@ -115,12 +118,11 @@ class ObjectSerializer
      * the header. If it's a string, pass through unchanged
      * If it's a datetime object, format it in ISO8601
      *
-     * @param string $value a string which will be part of the header
+     * @param mixed $value a string which will be part of the header
      *
      * @return string the header string
      */
-    public function toHeaderValue($value)
-    {
+    public function toHeaderValue(mixed $value): string {
         return $this->toString($value);
     }
 
@@ -129,12 +131,11 @@ class ObjectSerializer
      * the http body (form parameter). If it's a string, pass through unchanged
      * If it's a datetime object, format it in ISO8601
      *
-     * @param string $value the value of the form parameter
+     * @param mixed $value the value of the form parameter
      *
      * @return string the form string
      */
-    public function toFormValue($value)
-    {
+    public function toFormValue(mixed $value): string {
         if ($value instanceof SplFileObject) {
             return $value->getRealPath();
         } else {
@@ -147,14 +148,13 @@ class ObjectSerializer
      * the parameter. If it's a string, pass through unchanged
      * If it's a datetime object, format it in ISO8601
      *
-     * @param string $value the value of the parameter
+     * @param mixed $value the value of the parameter
      *
      * @return string the header string
      */
-    public function toString($value)
-    {
-        if ($value instanceof \DateTime) { // datetime in ISO8601 format
-            return $value->format(\DateTime::ISO8601);
+    public function toString(mixed $value): string {
+        if ($value instanceof DateTime) { // datetime in ISO8601 format
+            return $value->format('Y-m-d\TH:i:sO');
         }
         else if ($value === true) {
             return "true";
@@ -170,17 +170,18 @@ class ObjectSerializer
     /**
      * Deserialize a JSON string into an object
      *
-     * @param mixed  $data       object or primitive to be deserialized
-     * @param string $class      class name is passed as a string
-     * @param string $httpHeader HTTP headers
+     * @param mixed       $data       object or primitive to be deserialized
+     * @param string      $class      class name is passed as a string
+     * @param string|null $httpHeader HTTP headers
      *
-     * @return object an instance of $class
+     * @return mixed an instance of $class
+     * @throws \Exception
      */
-    public function deserialize($data, $class, $httpHeader=null)
+    public function deserialize(mixed $data, string $class, string $httpHeader=null) : mixed
     {
         if (null === $data) {
             $deserialized = null;
-        } elseif (substr($class, 0, 4) === 'map[') { // for associative array e.g. map[string,int]
+        } elseif ( str_starts_with( $class, 'map[' ) ) { // for associative array e.g. map[string,int]
             $inner = substr($class, 4, -1);
             $deserialized = array();
             if (strrpos($inner, ",") !== false) {
@@ -193,12 +194,12 @@ class ObjectSerializer
         } elseif (strcasecmp(substr($class, -2), '[]') == 0) {
             $subClass = substr($class, 0, -2);
             $values = array();
-            foreach ($data as $key => $value) {
+            foreach ($data as  $value) {
                 $values[] = $this->deserialize($value, $subClass);
             }
             $deserialized = $values;
         } elseif ($class === '\DateTime') {
-            $deserialized = new \DateTime($data);
+            $deserialized = new DateTime($data);
         } elseif (in_array($class, array('integer', 'int', 'void', 'number', 'object', 'double', 'float', 'byte', 'DateTime', 'string', 'mixed', 'boolean', 'bool'))) {
             settype($data, $class);
             $deserialized = $data;
@@ -209,11 +210,12 @@ class ObjectSerializer
             } else {
                 $filename = tempnam(Configuration::getDefaultConfiguration()->getTempFolderPath(), '');
             }
-            $deserialized = new \SplFileObject($filename, "w");
+            $deserialized = new SplFileObject( $filename, "w");
             $byte_written = $deserialized->fwrite($data);
             error_log("[INFO] Written $byte_written byte to $filename. Please move the file to a proper folder or delete the temp file after processing.\n", 3, Configuration::getDefaultConfiguration()->getDebugFile());
       
         } else {
+            /** @var \Systran\Client\Model\Model $instance */
             $instance = new $class();
             foreach ($instance::$SystranTypes as $property => $type) {
                 $propertySetter = $instance::$setters[$property];

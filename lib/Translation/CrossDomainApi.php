@@ -33,10 +33,9 @@
 
 namespace Systran\Client\Translation;
 
-use \Systran\Client\Configuration;
-use \Systran\Client\ApiClient;
-use \Systran\Client\ApiException;
-use \Systran\Client\ObjectSerializer;
+use SplFileObject;
+use Systran\Client\ApiClient;
+use Systran\Client\ApiException;
 
 /**
  * CrossDomainApi Class Doc Comment
@@ -47,186 +46,164 @@ use \Systran\Client\ObjectSerializer;
  * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache Licene v2
  * @link
  */
-class CrossDomainApi
-{
+class CrossDomainApi {
 
     /**
      * API Client
+     *
      * @var \Systran\Client\ApiClient instance of the ApiClient
      */
-    protected $apiClient;
-  
+    protected ApiClient $apiClient;
+
     /**
      * Constructor
+     *
      * @param \Systran\Client\ApiClient|null $apiClient The api client to use
      */
-    function __construct($apiClient = null)
-    {
-        if ($apiClient == null) {
+    function __construct( ApiClient $apiClient = null ) {
+        if ( $apiClient == null ) {
             $apiClient = new ApiClient();
-            $apiClient->getConfig()->setHost('https://localhost:8903');
+            $apiClient->getConfig()->setHost( 'https://localhost:8903' );
         }
-  
+
         $this->apiClient = $apiClient;
     }
-  
+
     /**
      * Get API client
+     *
      * @return \Systran\Client\ApiClient get the API client
      */
-    public function getApiClient()
-    {
+    public function getApiClient(): ApiClient {
         return $this->apiClient;
     }
-  
+
     /**
      * Set the API client
+     *
      * @param \Systran\Client\ApiClient $apiClient set the API client
+     *
      * @return CrossDomainApi
      */
-    public function setApiClient(ApiClient $apiClient)
-    {
+    public function setApiClient( ApiClient $apiClient ): static {
         $this->apiClient = $apiClient;
         return $this;
     }
-  
-    
+
+
     /**
      * clientaccesspolicyXmlGet
      *
      * Silverlight client access policy file
      *
-     * @return \SplFileObject
+     * @return \SplFileObject|null
      * @throws \Systran\Client\ApiException on non-2xx response
+     * @throws \Exception
      */
-    public function clientaccesspolicyXmlGet()
-    {
-        
-  
+    public function clientaccesspolicyXmlGet() : ?SplFileObject{
+
+
         // parse inputs
         $resourcePath = "/clientaccesspolicy.xml";
-        $resourcePath = str_replace("{format}", "json", $resourcePath);
-        $method = "GET";
-        $httpBody = '';
-        $queryParams = array();
-        $headerParams = array();
-        $formParams = array();
-        $_header_accept = ApiClient::selectHeaderAccept(array('application/xml'));
-        if (!is_null($_header_accept)) {
-            $headerParams['Accept'] = $_header_accept;
+        $resourcePath = str_replace( "{format}", "json", $resourcePath );
+        $method       = "GET";
+        $httpBody     = '';
+        $queryParams  = [];
+        $headerParams = [];
+
+        $_header_accept = ApiClient::selectHeaderAccept( [ 'application/xml' ] );
+        if ( !is_null( $_header_accept ) ) {
+            $headerParams[ 'Accept' ] = $_header_accept;
         }
-        $headerParams['Content-Type'] = ApiClient::selectHeaderContentType(array());
-  
-        
-        
-        
-        
-        
-  
+        $headerParams[ 'Content-Type' ] = ApiClient::selectHeaderContentType( [] );
+
+
         // for model (json/xml)
-        if (isset($_tempBody)) {
+        if ( isset( $_tempBody ) ) {
             $httpBody = $_tempBody; // $_tempBody is the method argument, if present
-        } else if (count($formParams) > 0) {
-            $httpBody = $formParams; // for HTTP post (form)
         }
-        
+
         // make the API Call
-        try
-        {
-            list($response, $httpHeader) = $this->apiClient->callApi(
+        try {
+            list( $response, $httpHeader ) = $this->apiClient->callApi(
                 $resourcePath, $method,
                 $queryParams, $httpBody,
                 $headerParams, '\SplFileObject'
             );
-            
-            if (!$response) {
+
+            if ( !$response ) {
                 return null;
             }
 
-            return $this->apiClient->getSerializer()->deserialize($response, '\SplFileObject', $httpHeader);
-            
-        } catch (ApiException $e) {
-            switch ($e->getCode()) { 
-            case 200:
-                $data = $this->apiClient->getSerializer()->deserialize($e->getResponseBody(), '\SplFileObject', $e->getResponseHeaders());
-                $e->setResponseObject($data);
-                break;
+            return $this->apiClient->getSerializer()->deserialize( $response, '\SplFileObject', $httpHeader );
+
+        }
+        catch ( ApiException $e ) {
+            if ( $e->getCode() == 200 ) {
+                $data = $this->apiClient->getSerializer()->deserialize( $e->getResponseBody(), '\SplFileObject', $e->getResponseHeaders() );
+                $e->setResponseObject( $data );
             }
-  
+
             throw $e;
         }
-        
-        return null;
-        
+
     }
-    
+
     /**
      * crossdomainXmlGet
      *
      * Adobe Flash cross-domain policy file
      *
-     * @return \SplFileObject
+     * @return \SplFileObject|null
      * @throws \Systran\Client\ApiException on non-2xx response
+     * @throws \Exception
      */
-    public function crossdomainXmlGet()
-    {
-        
-  
+    public function crossdomainXmlGet(): ?SplFileObject {
+
+
         // parse inputs
-        $resourcePath = "/crossdomain.xml";
-        $resourcePath = str_replace("{format}", "json", $resourcePath);
-        $method = "GET";
-        $httpBody = '';
-        $queryParams = array();
-        $headerParams = array();
-        $formParams = array();
-        $_header_accept = ApiClient::selectHeaderAccept(array('application/xml'));
-        if (!is_null($_header_accept)) {
-            $headerParams['Accept'] = $_header_accept;
+        $resourcePath   = "/crossdomain.xml";
+        $resourcePath   = str_replace( "{format}", "json", $resourcePath );
+        $method         = "GET";
+        $httpBody       = '';
+        $queryParams    = [];
+        $headerParams   = [];
+        $_header_accept = ApiClient::selectHeaderAccept( [ 'application/xml' ] );
+        if ( !is_null( $_header_accept ) ) {
+            $headerParams[ 'Accept' ] = $_header_accept;
         }
-        $headerParams['Content-Type'] = ApiClient::selectHeaderContentType(array());
-  
-        
-        
-        
-        
-        
-  
+        $headerParams[ 'Content-Type' ] = ApiClient::selectHeaderContentType( [] );
+
+
         // for model (json/xml)
-        if (isset($_tempBody)) {
+        if ( isset( $_tempBody ) ) {
             $httpBody = $_tempBody; // $_tempBody is the method argument, if present
-        } else if (count($formParams) > 0) {
-            $httpBody = $formParams; // for HTTP post (form)
         }
-        
+
         // make the API Call
-        try
-        {
-            list($response, $httpHeader) = $this->apiClient->callApi(
+        try {
+            list( $response, $httpHeader ) = $this->apiClient->callApi(
                 $resourcePath, $method,
                 $queryParams, $httpBody,
                 $headerParams, '\SplFileObject'
             );
-            
-            if (!$response) {
+
+            if ( !$response ) {
                 return null;
             }
 
-            return $this->apiClient->getSerializer()->deserialize($response, '\SplFileObject', $httpHeader);
-            
-        } catch (ApiException $e) {
-            switch ($e->getCode()) { 
-            case 200:
-                $data = $this->apiClient->getSerializer()->deserialize($e->getResponseBody(), '\SplFileObject', $e->getResponseHeaders());
-                $e->setResponseObject($data);
-                break;
+            return $this->apiClient->getSerializer()->deserialize( $response, '\SplFileObject', $httpHeader );
+
+        }
+        catch ( ApiException $e ) {
+            if ( $e->getCode() == 200 ) {
+                $data = $this->apiClient->getSerializer()->deserialize( $e->getResponseBody(), '\SplFileObject', $e->getResponseHeaders() );
+                $e->setResponseObject( $data );
             }
-  
+
             throw $e;
         }
-        
-        return null;
-        
+
     }
-    
+
 }

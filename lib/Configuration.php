@@ -34,6 +34,8 @@
 
 namespace Systran\Client;
 
+use InvalidArgumentException;
+
 /**
  * Configuration Class Doc Comment
  * PHP version 5
@@ -47,91 +49,89 @@ namespace Systran\Client;
 class Configuration
 {
 
-    private static $_defaultConfiguration = null;
+    private static ?Configuration $_defaultConfiguration = null;
   
     /** 
      * Associate array to store API key(s)
      *
      * @var string[]
      */
-    protected $apiKeys = array();
+    protected array $apiKeys = [];
   
     /**
      * Associate array to store API prefix (e.g. Bearer)
      *
      * @var string[]
      */
-    protected $apiKeyPrefixes = array();
+    protected array $apiKeyPrefixes = [];
   
     /** 
      * Username for HTTP basic authentication
      *
      * @var string
      */
-    protected $username = '';
+    protected string $username = '';
   
     /**
      * Password for HTTP basic authentication
      *
      * @var string
      */
-    protected $password = '';
+    protected string $password = '';
   
     /**
      * The default instance of ApiClient
-     *
-     * @var \Systran\Client\ApiClient
      */
-    protected $defaultHeaders = array();
+    protected array $defaultHeaders = array();
   
     /**
      * The host
      *
      * @var string
      */
-    protected $host = 'https://localhost:8903';
+    protected string $host = 'https://localhost:8903';
   
     /**
      * Timeout (second) of the HTTP request, by default set to 0, no timeout
      *
-     * @var string 
+     * @var int
      */
-    protected $curlTimeout = 0;
+    protected int $curlTimeout = 0;
   
     /**
      * User agent of the HTTP request, set to "PHP-Systran" by default
      *
      * @var string
      */
-    protected $userAgent = "PHP-Systran/1.0.0";
+    protected string $userAgent = "PHP-Systran/1.0.0";
   
     /**
      * Debug switch (default set to false)
      *
      * @var bool
      */
-    protected $debug = false;
+    protected bool $debug = false;
   
     /**
      * Debug file location (log to STDOUT by default)
      *
      * @var string
      */
-    protected $debugFile = 'php://output';
+    protected string $debugFile = 'php://output';
 
     /**
      * Debug file location (log to STDOUT by default)
      *
      * @var string
      */
-    protected $tempFolderPath;
+    protected string $tempFolderPath;
 
     /**
      * Debug switch (default set to false)
      *
      * @var bool
      */
-    protected $curlSSLVerify = false;
+    protected bool $curlSSLVerify = false;
 
     /**
      * Constructor
@@ -149,22 +149,20 @@ class Configuration
      *
      * @return Configuration
      */
-    public function setApiKey($apiKeyIdentifier, $key)
-    {
+    public function setApiKey( string $apiKeyIdentifier, string $key): static {
         $this->apiKeys[$apiKeyIdentifier] = $key;
         return $this;
     }
-  
+
     /**
      * Gets API key
      *
      * @param string $apiKeyIdentifier API key identifier (authentication scheme)
      *
-     * @return string API key or token
+     * @return string|null API key or token
      */
-    public function getApiKey($apiKeyIdentifier)
-    {
-        return isset($this->apiKeys[$apiKeyIdentifier]) ? $this->apiKeys[$apiKeyIdentifier] : null;
+    public function getApiKey( string $apiKeyIdentifier): ?string {
+        return $this->apiKeys[ $apiKeyIdentifier ] ?? null;
     }
   
     /**
@@ -175,22 +173,20 @@ class Configuration
      *
      * @return Configuration
      */
-    public function setApiKeyPrefix($apiKeyIdentifier, $prefix)
-    {
+    public function setApiKeyPrefix( string $apiKeyIdentifier, string $prefix): static {
         $this->apiKeyPrefixes[$apiKeyIdentifier] = $prefix;
         return $this;
     }
-  
+
     /**
      * Gets API key prefix
      *
      * @param string $apiKeyIdentifier API key identifier (authentication scheme)
      *
-     * @return string
+     * @return string|null
      */
-    public function getApiKeyPrefix($apiKeyIdentifier)
-    {
-        return isset($this->apiKeyPrefixes[$apiKeyIdentifier]) ? $this->apiKeyPrefixes[$apiKeyIdentifier] : null;
+    public function getApiKeyPrefix( string $apiKeyIdentifier): ?string {
+        return $this->apiKeyPrefixes[ $apiKeyIdentifier ] ?? null;
     }
   
     /**
@@ -200,8 +196,7 @@ class Configuration
      *
      * @return Configuration
      */
-    public function setUsername($username)
-    {
+    public function setUsername( string $username): static {
         $this->username = $username;
         return $this;
     }
@@ -211,8 +206,7 @@ class Configuration
      *
      * @return string Username for HTTP basic authentication
      */
-    public function getUsername()
-    {
+    public function getUsername(): string {
         return $this->username;
     }
   
@@ -223,8 +217,7 @@ class Configuration
      *
      * @return Configuration
      */
-    public function setPassword($password)
-    {
+    public function setPassword( string $password): static {
         $this->password = $password;
         return $this;
     }
@@ -234,8 +227,7 @@ class Configuration
      *
      * @return string Password for HTTP basic authentication
      */
-    public function getPassword()
-    {
+    public function getPassword(): string {
         return $this->password;
     }
   
@@ -245,12 +237,11 @@ class Configuration
      * @param string $headerName  header name (e.g. Token)
      * @param string $headerValue header value (e.g. 1z8wp3)
      *
-     * @return ApiClient
+     * @return \Systran\Client\Configuration
      */
-    public function addDefaultHeader($headerName, $headerValue)
-    {
+    public function addDefaultHeader( mixed $headerName, string $headerValue): static {
         if (!is_string($headerName)) {
-            throw new \InvalidArgumentException('Header name must be a string.');
+            throw new InvalidArgumentException('Header name must be a string.');
         }
   
         $this->defaultHeaders[$headerName] =  $headerValue;
@@ -262,7 +253,7 @@ class Configuration
      *
      * @return array An array of default header(s)
      */
-    public function getDefaultHeaders()
+    public function getDefaultHeaders() : array
     {
         return $this->defaultHeaders;
     }
@@ -271,11 +262,8 @@ class Configuration
      * Deletes a default header
      *
      * @param string $headerName the header to delete
-     *
-     * @return Configuration
      */
-    public function deleteDefaultHeader($headerName)
-    {
+    public function deleteDefaultHeader( string $headerName): void {
         unset($this->defaultHeaders[$headerName]);
     }
   
@@ -286,8 +274,7 @@ class Configuration
      *
      * @return Configuration
      */
-    public function setHost($host)
-    {
+    public function setHost( string $host): static {
         $this->host = $host;
         return $this;
     }
@@ -297,8 +284,7 @@ class Configuration
      *
      * @return string Host
      */
-    public function getHost()
-    {
+    public function getHost(): string {
         return $this->host;
     }
   
@@ -307,12 +293,11 @@ class Configuration
      *
      * @param string $userAgent the user agent of the api client
      *
-     * @return ApiClient
+     * @return \Systran\Client\Configuration
      */
-    public function setUserAgent($userAgent)
-    {
+    public function setUserAgent( mixed $userAgent): static {
         if (!is_string($userAgent)) {
-            throw new \InvalidArgumentException('User-agent must be a string.');
+            throw new InvalidArgumentException('User-agent must be a string.');
         }
   
         $this->userAgent = $userAgent;
@@ -324,8 +309,7 @@ class Configuration
      *
      * @return string user agent
      */
-    public function getUserAgent()
-    {
+    public function getUserAgent(): string {
         return $this->userAgent;
     }
   
@@ -334,25 +318,23 @@ class Configuration
      *
      * @param integer $seconds Number of seconds before timing out [set to 0 for no timeout]
      *
-     * @return ApiClient
+     * @return \Systran\Client\Configuration
      */
-    public function setCurlTimeout($seconds)
-    {
+    public function setCurlTimeout( mixed $seconds): static {
         if (!is_numeric($seconds) || $seconds < 0) {
-            throw new \InvalidArgumentException('Timeout value must be numeric and a non-negative number.');
+            throw new InvalidArgumentException('Timeout value must be numeric and a non-negative number.');
         }
   
-        $this->curlTimeout = $seconds;
+        $this->curlTimeout = (int)$seconds;
         return $this;
     }
   
     /**
      * Gets the HTTP timeout value
      *
-     * @return string HTTP timeout value
+     * @return int HTTP timeout value
      */
-    public function getCurlTimeout()
-    {
+    public function getCurlTimeout(): int {
         return $this->curlTimeout;
     }
   
@@ -363,8 +345,7 @@ class Configuration
      *
      * @return Configuration
      */
-    public function setDebug($debug)
-    {
+    public function setDebug( bool $debug): static {
         $this->debug = $debug;
         return $this;
     }
@@ -374,8 +355,7 @@ class Configuration
      *
      * @return bool
      */
-    public function getDebug()
-    {
+    public function getDebug(): bool {
         return $this->debug;
     }
   
@@ -386,8 +366,7 @@ class Configuration
      *
      * @return Configuration
      */
-    public function setDebugFile($debugFile)
-    {
+    public function setDebugFile( string $debugFile): static {
         $this->debugFile = $debugFile;
         return $this;
     }
@@ -397,8 +376,7 @@ class Configuration
      *
      * @return string
      */
-    public function getDebugFile()
-    {
+    public function getDebugFile(): string {
         return $this->debugFile;
     }
  
@@ -409,8 +387,7 @@ class Configuration
      *
      * @return Configuration
      */
-    public function setTempFolderPath($tempFolderPath)
-    {
+    public function setTempFolderPath( string $tempFolderPath): static {
         $this->tempFolderPath = $tempFolderPath;
         return $this;
     }
@@ -420,19 +397,17 @@ class Configuration
      *
      * @return string Temp folder path
      */
-    public function getTempFolderPath()
-    {
+    public function getTempFolderPath(): string {
         return $this->tempFolderPath;
     }
- 
+
     /**
      * Gets the default configuration instance
      *
      * @return Configuration
      */
-    public static function getDefaultConfiguration()
-    {
-        if (self::$_defaultConfiguration == null) {
+    public static function getDefaultConfiguration(): Configuration {
+        if (self::$_defaultConfiguration === null) {
             self::$_defaultConfiguration = new Configuration();
         }
   
@@ -440,14 +415,13 @@ class Configuration
     }
   
     /**
-     * Sets the detault configuration instance
+     * Sets the default configuration instance
      *
      * @param Configuration $config An instance of the Configuration Object
      *
      * @return void
      */
-    public static function setDefaultConfiguration(Configuration $config)
-    {
+    public static function setDefaultConfiguration(Configuration $config): void {
         self::$_defaultConfiguration = $config;
     }
   
@@ -456,8 +430,7 @@ class Configuration
      *
      * @return string The report for debugging
      */
-    public static function toDebugReport()
-    {
+    public static function toDebugReport(): string {
         $report  = "PHP SDK (Systran\Client) Debug Report:\n";
         $report .= "    OS: ".php_uname()."\n";
         $report .= "    PHP Version: ".phpversion()."\n";
@@ -475,8 +448,7 @@ class Configuration
      *
      * @return Configuration
      */
-    public function setStopCurlSSLVerify($verify)
-    {
+    public function setStopCurlSSLVerify( bool $verify): static {
       $this->curlSSLVerify = $verify;
       return $this;
     }
@@ -486,8 +458,7 @@ class Configuration
      *
      * @return bool
      */
-    public function getStopCurlSSLVerify()
-    {
+    public function getStopCurlSSLVerify(): bool {
       return $this->curlSSLVerify;
     }
 

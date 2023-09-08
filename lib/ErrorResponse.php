@@ -33,7 +33,7 @@
 
 namespace Systran\Client;
 
-use \ArrayAccess;
+use ArrayAccess;
 /**
  * ErrorResponse Class Doc Comment
  *
@@ -50,55 +50,56 @@ class ErrorResponse implements ArrayAccess
       * Array of property to type mappings. Used for (de)serialization 
       * @var string[]
       */
-    static $SystranTypes = array(
+    static array $SystranTypes = [
         'message' => 'string',
         'info' => 'object'
-    );
+    ];
   
     /** 
       * Array of attributes where the key is the local name, and the value is the original name
       * @var string[] 
       */
-    static $attributeMap = array(
+    static array $attributeMap = [
         'message' => 'message',
         'info' => 'info'
-    );
+    ];
   
     /**
       * Array of attributes to setter functions (for deserialization of responses)
       * @var string[]
       */
-    static $setters = array(
+    static array $setters = [
         'message' => 'setMessage',
         'info' => 'setInfo'
-    );
+    ];
   
     /**
       * Array of attributes to getter functions (for serialization of requests)
       * @var string[]
       */
-    static $getters = array(
+    static array $getters = [
         'message' => 'getMessage',
         'info' => 'getInfo'
-    );
+    ];
   
     
     /**
       * $message Readable description of the error
       * @var string
       */
-    protected $message;
+    protected mixed $message;
     
     /**
       * $info Additional information about the error
       * @var object
       */
-    protected $info;
-    
+    protected mixed $info;
+
 
     /**
      * Constructor
-     * @param mixed[] $data Associated array of property value initalizing the model
+     *
+     * @param array|null $data Associated array of property value initalizing the model
      */
     public function __construct(array $data = null)
     {
@@ -112,18 +113,18 @@ class ErrorResponse implements ArrayAccess
      * Gets message
      * @return string
      */
-    public function getMessage()
-    {
+    public function getMessage(): string {
         return $this->message;
     }
   
     /**
      * Sets message
+     *
      * @param string $message Readable description of the error
+     *
      * @return $this
      */
-    public function setMessage($message)
-    {
+    public function setMessage( string $message): static {
         
         $this->message = $message;
         return $this;
@@ -133,8 +134,7 @@ class ErrorResponse implements ArrayAccess
      * Gets info
      * @return object
      */
-    public function getInfo()
-    {
+    public function getInfo(): object {
         return $this->info;
     }
   
@@ -143,8 +143,7 @@ class ErrorResponse implements ArrayAccess
      * @param object $info Additional information about the error
      * @return $this
      */
-    public function setInfo($info)
-    {
+    public function setInfo(mixed $info): static {
         
         $this->info = $info;
         return $this;
@@ -155,7 +154,7 @@ class ErrorResponse implements ArrayAccess
      * @param  integer $offset Offset 
      * @return boolean
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset) :bool
     {
         return isset($this->$offset);
     }
@@ -165,7 +164,7 @@ class ErrorResponse implements ArrayAccess
      * @param  integer $offset Offset 
      * @return mixed 
      */
-    public function offsetGet($offset)
+    public function offsetGet($offset) : mixed
     {
         return $this->$offset;
     }
@@ -176,7 +175,7 @@ class ErrorResponse implements ArrayAccess
      * @param  mixed   $value  Value to be set
      * @return void
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet( $offset, mixed $value) : void
     {
         $this->$offset = $value;
     }
@@ -186,8 +185,7 @@ class ErrorResponse implements ArrayAccess
      * @param  integer $offset Offset 
      * @return void
      */
-    public function offsetUnset($offset)
-    {
+    public function offsetUnset($offset): void {
         unset($this->$offset);
     }
   

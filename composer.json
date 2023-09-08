@@ -1,6 +1,6 @@
 {
-    "name": "systran/systran-client",
-    "version": "1.0.0",
+    "name": "zmog/systran-client",
+    "version": "1.0.1",
     "description": "",
     "keywords": [
         "Systran",
@@ -8,12 +8,16 @@
         "sdk",
         "api"
     ],
-    "homepage": "https://platform.systran.net/",
     "license": "Apache v2",
     "authors": [
         {
             "name": "Systran",
             "homepage": "https://github.com/SYSTRAN/translation-api-php-client"
+        },
+        {
+            "name": "Mathieu Vedie",
+            "email" : "mathieu.vedie@gmail.com",
+            "role" : "Developer"
         }
     ],
     "require": {

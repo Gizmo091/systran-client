@@ -1,39 +1,7 @@
 <?php
-/**
- * Profile
- *
- * PHP version 5
- *
- * @category Class
- * @package  Systran\Client
- * @author   http://github.com/Systran-api/Systran-codegen
- * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache Licene v2
- * @link
- */
-/**
- *  Copyright 2015 SmartBear Software
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- */
-/**
- *
- *
- * Do not edit the class manually.
- */
 
 namespace Systran\Client\Model;
 
-use \ArrayAccess;
 /**
  * Profile Class Doc Comment
  *
@@ -44,259 +12,219 @@ use \ArrayAccess;
  * @license     http://www.apache.org/licenses/LICENSE-2.0 Apache Licene v2
  * @link
  */
-class Profile implements ArrayAccess
-{
+class Profile extends Model  {
     /**
-      * Array of property to type mappings. Used for (de)serialization 
-      * @var string[]
-      */
-    static $SystranTypes = array(
-        'id' => 'int',
+     * Array of property to type mappings. Used for (de)serialization
+     *
+     * @var string[]
+     */
+    static array $SystranTypes = array(
+        'id'           => 'int',
         'localization' => 'object',
-        'name' => 'string',
-        'source' => 'string',
-        'target' => 'string'
+        'name'         => 'string',
+        'source'       => 'string',
+        'target'       => 'string'
     );
-  
-    /** 
-      * Array of attributes where the key is the local name, and the value is the original name
-      * @var string[] 
-      */
-    static $attributeMap = array(
-        'id' => 'id',
+
+    /**
+     * Array of attributes where the key is the local name, and the value is the original name
+     *
+     * @var string[]
+     */
+    static array $attributeMap = array(
+        'id'           => 'id',
         'localization' => 'localization',
-        'name' => 'name',
-        'source' => 'source',
-        'target' => 'target'
+        'name'         => 'name',
+        'source'       => 'source',
+        'target'       => 'target'
     );
-  
+
     /**
-      * Array of attributes to setter functions (for deserialization of responses)
-      * @var string[]
-      */
-    static $setters = array(
-        'id' => 'setId',
+     * Array of attributes to setter functions (for deserialization of responses)
+     *
+     * @var string[]
+     */
+    static array $setters = array(
+        'id'           => 'setId',
         'localization' => 'setLocalization',
-        'name' => 'setName',
-        'source' => 'setSource',
-        'target' => 'setTarget'
+        'name'         => 'setName',
+        'source'       => 'setSource',
+        'target'       => 'setTarget'
     );
-  
+
     /**
-      * Array of attributes to getter functions (for serialization of requests)
-      * @var string[]
-      */
-    static $getters = array(
-        'id' => 'getId',
+     * Array of attributes to getter functions (for serialization of requests)
+     *
+     * @var string[]
+     */
+    static array $getters = array(
+        'id'           => 'getId',
         'localization' => 'getLocalization',
-        'name' => 'getName',
-        'source' => 'getSource',
-        'target' => 'getTarget'
+        'name'         => 'getName',
+        'source'       => 'getSource',
+        'target'       => 'getTarget'
     );
-  
-    
+
+
     /**
-      * $id Profile identifier
-      * @var int
-      */
-    protected $id;
-    
+     * $id Profile identifier
+     *
+     * @var int
+     */
+    protected int $id;
+
     /**
-      * $localization Localization of the profile name
-      * @var object
-      */
-    protected $localization;
-    
+     * $localization Localization of the profile name
+     *
+     * @var object
+     */
+    protected mixed $localization;
+
     /**
-      * $name Name
-      * @var string
-      */
-    protected $name;
-    
+     * $name Name
+     *
+     * @var string
+     */
+    protected string $name;
+
     /**
-      * $source Source
-      * @var string
-      */
-    protected $source;
-    
+     * $source Source
+     *
+     * @var string
+     */
+    protected string $source;
+
     /**
-      * $target Target
-      * @var string
-      */
-    protected $target;
-    
+     * $target Target
+     *
+     * @var string
+     */
+    protected string $target;
+
 
     /**
      * Constructor
-     * @param mixed[] $data Associated array of property value initalizing the model
+     *
+     * @param array|null $data Associated array of property value initalizing the model
      */
-    public function __construct(array $data = null)
-    {
-        if ($data != null) {
-            $this->id = $data["id"];
-            $this->localization = $data["localization"];
-            $this->name = $data["name"];
-            $this->source = $data["source"];
-            $this->target = $data["target"];
+    public function __construct( array $data = null ) {
+        if ( $data != null ) {
+            $this->id           = $data[ "id" ];
+            $this->localization = $data[ "localization" ];
+            $this->name         = $data[ "name" ];
+            $this->source       = $data[ "source" ];
+            $this->target       = $data[ "target" ];
         }
     }
-    
+
     /**
      * Gets id
+     *
      * @return int
      */
-    public function getId()
-    {
+    public function getId(): int {
         return $this->id;
     }
-  
+
     /**
      * Sets id
+     *
      * @param int $id Profile identifier
+     *
      * @return $this
      */
-    public function setId($id)
-    {
-        
+    public function setId( int $id ): static {
+
         $this->id = $id;
         return $this;
     }
-    
+
     /**
      * Gets localization
+     *
      * @return object
      */
-    public function getLocalization()
-    {
+    public function getLocalization(): mixed {
         return $this->localization;
     }
-  
+
     /**
      * Sets localization
+     *
      * @param object $localization Localization of the profile name
+     *
      * @return $this
      */
-    public function setLocalization($localization)
-    {
-        
+    public function setLocalization( mixed $localization ): static {
+
         $this->localization = $localization;
         return $this;
     }
-    
+
     /**
      * Gets name
+     *
      * @return string
      */
-    public function getName()
-    {
+    public function getName(): string {
         return $this->name;
     }
-  
+
     /**
      * Sets name
+     *
      * @param string $name Name
+     *
      * @return $this
      */
-    public function setName($name)
-    {
-        
+    public function setName( string $name ): static {
+
         $this->name = $name;
         return $this;
     }
-    
+
     /**
      * Gets source
+     *
      * @return string
      */
-    public function getSource()
-    {
+    public function getSource(): string {
         return $this->source;
     }
-  
+
     /**
      * Sets source
+     *
      * @param string $source Source
+     *
      * @return $this
      */
-    public function setSource($source)
-    {
-        
+    public function setSource( string $source ): static {
+
         $this->source = $source;
         return $this;
     }
-    
+
     /**
      * Gets target
+     *
      * @return string
      */
-    public function getTarget()
-    {
+    public function getTarget(): string {
         return $this->target;
     }
-  
+
     /**
      * Sets target
+     *
      * @param string $target Target
+     *
      * @return $this
      */
-    public function setTarget($target)
-    {
-        
+    public function setTarget( string $target ): static {
+
         $this->target = $target;
         return $this;
     }
-    
-    /**
-     * Returns true if offset exists. False otherwise.
-     * @param  integer $offset Offset 
-     * @return boolean
-     */
-    public function offsetExists($offset)
-    {
-        return isset($this->$offset);
-    }
-  
-    /**
-     * Gets offset.
-     * @param  integer $offset Offset 
-     * @return mixed 
-     */
-    public function offsetGet($offset)
-    {
-        return $this->$offset;
-    }
-  
-    /**
-     * Sets value based on offset.
-     * @param  integer $offset Offset 
-     * @param  mixed   $value  Value to be set
-     * @return void
-     */
-    public function offsetSet($offset, $value)
-    {
-        $this->$offset = $value;
-    }
-  
-    /**
-     * Unsets offset.
-     * @param  integer $offset Offset 
-     * @return void
-     */
-    public function offsetUnset($offset)
-    {
-        unset($this->$offset);
-    }
-  
-    /**
-     * Gets the string presentation of the object
-     * @return string
-     */
-    public function __toString()
-    {
-        if (defined('JSON_PRETTY_PRINT')) {
-            return json_encode(get_object_vars($this), JSON_PRETTY_PRINT);
-        } else {
-            return json_encode(get_object_vars($this));
-        }
-    }
+
 }
