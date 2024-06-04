@@ -56,7 +56,7 @@ class ApiException extends Exception
      * The HTTP header of the server response.
      * @var string[]
      */
-    protected ?mixed $responseHeaders;
+    protected mixed $responseHeaders;
   
     /**
      * The deserialized response object
